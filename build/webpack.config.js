@@ -2,6 +2,14 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+console.log('构建时区分环境:不准确')
+if ('development' === process.env.NODE_ENV) {
+    // 开发环境下的逻辑
+    console.log('开发环境')
+} else {
+    // 生产环境下
+    console.log('生产环境')
+}
 module.exports = {
     entry: {
         app: path.resolve(__dirname, '../src/index.js')
@@ -24,9 +32,13 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {loader: 'style-loader'},
+                    {loader: 'vue-style-loader'},
                     {loader: 'css-loader'}
                 ]
+            },
+            {
+                test: /\.less$/,
+                loader: "style-loader!css-loader!less-loader",
             },
             {
                 test: /\.sass$/,

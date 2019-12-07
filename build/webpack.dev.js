@@ -1,4 +1,5 @@
 const merge = require('webpack-merge');
+const webpack = require('webpack');
 const path = require('path');
 const baseWebpackConfig = require('./webpack.config');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -9,9 +10,14 @@ const devWebpackConfig = {
         hot: true,
         port: 3000,
         publicPath:'/',
-        contentBase: false
+        contentBase: false//使用CopyWebpackPlugin
     },
     plugins:[
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV:'"development"'
+            }
+        }),
         //开发环境：静态资源拷贝到内存
         new CopyWebpackPlugin([
             {

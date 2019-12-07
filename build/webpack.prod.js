@@ -1,11 +1,9 @@
 const path = require('path');
-
 const merge = require('webpack-merge');
+const webpack = require('webpack');
 const baseWebpackConfig = require('./webpack.config');
-
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
 const prodWebpackConfig = {
     mode: 'production',//生产模式会自动压缩代码
     devtool: '#source-map',
@@ -14,11 +12,17 @@ const prodWebpackConfig = {
     },
     //插件顺序从后往前
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV:'"production"'
+            }
+        }),
         //生产环境：静态资源拷贝到dist文件夹
         new CopyWebpackPlugin([
             {
                 from: path.resolve(__dirname, '../static'),
-                to: path.resolve(__dirname, '../dist/static')
+                to: path.resolve(__dirname, '../dist/static'),
+                ignore:['.*']
             }
         ]),
         //清理js文件，否则垃圾堆积(有用)
@@ -31,3 +35,17 @@ if(process.env.npm_config_analyze){
     prodWebpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 module.exports = merge(baseWebpackConfig, prodWebpackConfig);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
