@@ -9,6 +9,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const prodWebpackConfig = {
     mode: 'production',//生产模式会自动压缩代码
     devtool: '#source-map',
+    output:{
+        publicPath:'./'//相对路径，防止404
+    },
     //插件顺序从后往前
     plugins: [
         //生产环境：静态资源拷贝到dist文件夹
