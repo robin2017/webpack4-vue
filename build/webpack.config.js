@@ -85,6 +85,10 @@ module.exports = {
         // }
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            jQuery:'jquery',
+            $:'jquery'
+        }),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname,
                 '../index.html'),//源
