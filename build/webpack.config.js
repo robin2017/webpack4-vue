@@ -2,24 +2,28 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-console.log('构建时区分环境:不准确')
-if ('development' === process.env.NODE_ENV) {
-    // 开发环境下的逻辑
-    console.log('开发环境')
-} else {
-    // 生产环境下
-    console.log('生产环境')
-}
 module.exports = {
     entry: {
         app: path.resolve(__dirname, '../src/index.js')
     },
     output: {
-        path: path.resolve(__dirname, '../dist'),
         filename: 'js/[name].[hash:6].js',
     },
     module: {
         rules: [
+            {
+                test: /\.vue$/,
+                use: [
+                    {
+                        loader: 'vue-loader',
+                        options: {
+                            compilerOptions: {
+                                preserveWhitespace: false
+                            },
+                        }
+                    }
+                ]
+            },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
@@ -32,7 +36,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {loader: 'vue-style-loader'},
+                    {loader: 'style-loader'},
                     {loader: 'css-loader'}
                 ]
             },
@@ -40,19 +44,7 @@ module.exports = {
                 test: /\.less$/,
                 loader: "style-loader!css-loader!less-loader",
             },
-            {
-                test: /\.sass$/,
-                use: [
-                    {loader: 'style-loader'},
-                    {loader: 'css-loader'},
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            implementation: require('dart-sass')
-                        }
-                    }
-                ]
-            },
+
             {
                 test: /\.jpeg$/,
                 use: [
@@ -78,19 +70,6 @@ module.exports = {
                     limit: 10000,
                     name: 'fonts/[name].[hash:7].[ext]'
                 }
-            },
-            {
-                test: /\.vue$/,
-                use: [
-                    {
-                        loader: 'vue-loader',
-                        options: {
-                            compilerOptions: {
-                                preserveWhitespace: false
-                            },
-                        }
-                    }
-                ]
             }
         ]
     },
@@ -102,7 +81,9 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname,
-                '../index.html')
+                '../index.html'),//源
+            filename: path.resolve(__dirname,
+                '../dist/index.html')//目的
         }),
         new webpack.HotModuleReplacementPlugin(),
         new VueLoaderPlugin()

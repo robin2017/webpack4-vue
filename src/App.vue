@@ -24,7 +24,10 @@
         }
     };
 </script>
+
 <style lang="less">
+    @import './less/app.less';
+
     html, body {
         height: 100%;
     }
@@ -36,13 +39,11 @@
 
     .App {
         color: red;
-        background-color: lightgray;
+        background-color: @background-color;
         padding: 20px;
         img {
             display: block;
         }
     }
-
-
 </style>
 
