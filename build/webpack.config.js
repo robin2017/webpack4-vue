@@ -90,11 +90,18 @@ module.exports = {
             automaticNameDelimiter: '~',
             name: true,
             cacheGroups: {
-                vendors: {
+                //提取第三方代码
+                vue_ele: { //vue全家桶必用
+                    test: /[\\/]node_modules\/(vue|element-ui|vue-router)[\\/]/,
+                    priority: -5,
+                    filename: 'js/vue_ele.[chunkhash:6].js'
+                },
+                vendors: { //其他第三方选用，可以动态导入
                     test: /[\\/]node_modules[\\/]/,
                     priority: -10,
-                    filename:'js/vendors.[chunkhash:6].js'
+                    filename: 'js/vendors.[chunkhash:6].js'
                 },
+                //提取公共代码
                 default: {
                     minChunks: 2,
                     priority: -20,
