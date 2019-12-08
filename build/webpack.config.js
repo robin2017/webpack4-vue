@@ -4,7 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports = {
     entry: {
-        app: path.resolve(__dirname, '../src/main.js')
+        app: path.resolve(__dirname, '../src/main.js'),
+        vendor: ['vue', 'vue-router', 'jquery']
     },
     output: {
         filename: 'js/[name].[hash:6].js',
@@ -12,7 +13,7 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
-            '@': path.join(__dirname, '..','src'),
+            '@': path.join(__dirname, '..', 'src'),
         }
     },
     module: {
@@ -80,14 +81,27 @@ module.exports = {
         ]
     },
     optimization: {
-        // splitChunks: {
-        //     chunks: 'all'
-        // }
+        splitChunks: {
+            chunks: 'all',
+            minSize:30000,//默认大小，超过30kb就放入vendor
+            minChunks:1,//默认大小，2个以上共享就繁缛vendor
+            maxInitialRequests:3,//默认大小
+            maxAsyncRequests:5,//默认大小
+            cacheGroups: {
+                commons: {
+                    name: "commons",
+                    chunks: "initial",
+                    minChunks: 2
+                }
+            },
+
+
+        }
     },
     plugins: [
         new webpack.ProvidePlugin({
-            jQuery:'jquery',
-            $:'jquery'
+            jQuery: 'jquery',
+            $: 'jquery'
         }),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname,
