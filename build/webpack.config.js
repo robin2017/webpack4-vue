@@ -4,8 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports = {
     entry: {
-        app: path.resolve(__dirname, '../src/main.js'),
-        vendor: ['vue', 'vue-router', 'jquery']
+        app: path.resolve(__dirname, '../src/main.js')
     },
     output: {
         filename: 'js/[name].[hash:6].js',
@@ -75,27 +74,32 @@ module.exports = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: 'fonts/[name].[hash:7].[ext]'
+                    name: 'fonts/[name].[hash:6].[ext]'
                 }
             }
         ]
     },
     optimization: {
         splitChunks: {
-            chunks: 'all',
-            minSize:30000,//默认大小，超过30kb就放入vendor
-            minChunks:1,//默认大小，2个以上共享就繁缛vendor
-            maxInitialRequests:3,//默认大小
-            maxAsyncRequests:5,//默认大小
+            chunks: "async",
+            minSize: 30000,
+            minChunks: 1,
+            maxAsyncRequests: 5,
+            maxInitialRequests: 3,
+            automaticNameDelimiter: '~',
+            name: true,
             cacheGroups: {
-                commons: {
-                    name: "commons",
-                    chunks: "initial",
-                    minChunks: 2
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    filename:'js/vendors.[chunkhash:6].js'
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true
                 }
-            },
-
-
+            }
         }
     },
     plugins: [
