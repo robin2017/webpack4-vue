@@ -11,6 +11,37 @@ const prodWebpackConfig = {
         path: path.resolve(__dirname, '../dist/static'),
         publicPath: './static/'//相对路径，防止404
     },
+    //chunkhash不能与热更新一起，放在生产环境
+    optimization: {
+        splitChunks: {
+            chunks: "all",
+            minSize: 30000,//值为第三方代码和业务代码之和
+            minChunks: 1,
+            maxAsyncRequests: 5,
+            maxInitialRequests: 3,
+            automaticNameDelimiter: '~',
+            name: true,
+            cacheGroups: {
+                //提取第三方代码
+                vue_ele: { //vue全家桶必用
+                    test: /[\\/]node_modules\/(vue|element-ui|vue-router)[\\/]/,
+                    priority: -5,
+                    filename: 'js/vue_ele.[chunkhash:6].js'
+                },
+                vendors: { //其他第三方选用，可以动态导入
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    filename: 'js/vendors.[chunkhash:6].js'
+                },
+                //提取公共代码
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true
+                }
+            }
+        }
+    },
     //插件顺序从后往前
     plugins: [
         new webpack.DefinePlugin({
