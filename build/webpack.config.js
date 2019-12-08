@@ -79,10 +79,11 @@ module.exports = {
             }
         ]
     },
+    //chunkhash不能与热更新一起！！！
     optimization: {
         splitChunks: {
             chunks: "all",
-            minSize: 30000,
+            minSize: 30000,//值为第三方代码和业务代码之和
             minChunks: 1,
             maxAsyncRequests: 5,
             maxInitialRequests: 3,

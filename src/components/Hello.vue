@@ -1,6 +1,7 @@
 <template>
     <div class="hello">
         <h1>{{msg}}</h1>
+        <el-button>ElementUI Button</el-button>
         <img src="static/images/people.jpeg">
         <p id="green">green</p>
     </div>
